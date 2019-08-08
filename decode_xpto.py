@@ -42,15 +42,17 @@ async def main():
     async with aiofiles.open(wordlist_file, mode='r') as f:
         wordlist_file_contents = await f.readlines()
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as pp_executor:
-        future_tasks = {pp_executor.submit(create_hashes, algorithm, wordlist_file_contents) for algorithm in create_queue_algorithms()}
+        future_tasks = {pp_executor.submit(
+            create_hashes, algorithm, wordlist_file_contents) for algorithm in create_queue_algorithms()}
         for future_task in future_tasks:
             future_task.add_done_callback(done_callback)
 
 
 if __name__ == '__main__':
     event_loop = asyncio.get_event_loop_policy().get_event_loop()
+    #executor = concurrent.futures.ProcessPoolExecutor(max_workers=max_workers)
+    # event_loop.set_default_executor(executor)
     event_loop.set_exception_handler(logging_handler)
-    event_loop.set_default_executor()
     event_loop.set_debug(True)
     event_loop.run_until_complete(main())
     asyncgens = event_loop.shutdown_asyncgens()
