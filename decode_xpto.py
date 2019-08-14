@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 max_workers = len(hashlib.algorithms_available)
-_, xpto, wordlist_file = sys.argv
+*_, xpto, wordlist_file = sys.argv
 
 
 def logging_handler(type, exception, tb):
@@ -28,7 +28,7 @@ def create_hashes(algorithm, wordlist_file_contents):
         if getattr(algorithm_func, 'hexdigest'):
             hexdigest = str(algorithm_func.hexdigest())
             if hexdigest == xpto:
-                password_xpto = 'XPTO_PASS...: {}'.format(word)
+                password_xpto = 'Algorithm: {}\nClean password: {}'.format(algorithm, word)
                 Path('password.txt').open(mode='w+').write(password_xpto)
 
 
